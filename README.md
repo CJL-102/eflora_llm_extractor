@@ -7,7 +7,7 @@
 
 ## 研究背景 | Background
 
-植物志（Flora of China）包含海量物种形态描述文本，手动提取关键性状（如生长型、生命周期）耗时费力。本研究构建了一套基于LLM API的自动化性状提取流程，并对三种主流中文大模型的提取准确性、响应质量与输出稳定性进行系统评估。
+植物志（Flora of China）包含海量物种形态描述文本，手动提取关键性状（如生长型、生活型）耗时费力。本研究构建了一套基于LLM API的自动化性状提取流程，并对三种主流中文大模型的提取准确性、响应质量与输出稳定性进行系统评估。
 
 The *Flora of China* contains extensive morphological descriptions for thousands of species. Manual extraction of key traits (e.g., growth form, life span) is labor-intensive. This study establishes an automated LLM-based trait extraction pipeline and systematically benchmarks three leading Chinese LLMs on extraction accuracy, response quality, and output stability.
 
@@ -15,20 +15,20 @@ The *Flora of China* contains extensive morphological descriptions for thousands
 
 ## 评估目标 | Evaluated Traits
 
-| 性状 | Trait | 类别 | Categories |
-|------|-------|------|------------|
-| 生长型 | Growth form | 草本 / 木本 | Herbaceous / Woody |
-| 生命周期 | Life span | 一年生 / 多年生 | Annual / Perennial |
+| 性状  | Trait       | 类别        | Categories         |
+| --- | ----------- | --------- | ------------------ |
+| 生长型 | Growth form | 草本 / 木本   | Herbaceous / Woody |
+| 生活型 | Life span   | 一年生 / 多年生 | Annual / Perennial |
 
 ---
 
 ## 评估模型 | Benchmarked Models
 
-| 模型 | 提供方 | Model | Provider |
-|------|--------|-------|----------|
-| DeepSeek | DeepSeek | DeepSeek | DeepSeek |
-| Doubao | 火山引擎 | Doubao | Volcano Engine (ByteDance) |
-| Kimi | 月之暗面 | Kimi | Moonshot AI |
+| 模型       | 提供方      | Model    | Provider                   |
+| -------- | -------- | -------- | -------------------------- |
+| DeepSeek | DeepSeek | DeepSeek | DeepSeek                   |
+| Doubao   | 火山引擎     | Doubao   | Volcano Engine (ByteDance) |
+| Kimi     | 月之暗面     | Kimi     | Moonshot AI                |
 
 ---
 
@@ -59,7 +59,7 @@ eflora_llm_extractor/
 植物志文本 (Flora of China text)
         │
         ▼
-  LLM API 批量调用（3 模型 × 多次重复）
+  LLM API 批量调用（3 模型 × 5重复）
         │
         ▼
   性状提取结果（growth_form, life_span）
@@ -83,27 +83,27 @@ eflora_llm_extractor/
 
 ### 性能指标 | Performance
 
-| 指标 | Metric | 说明 |
-|------|--------|------|
-| Accuracy | 准确率 | 所有类别的整体正确率 |
-| Precision | 精确率 | 预测为正类中真正为正的比例 |
-| Recall | 召回率 | 真实正类中被正确识别的比例 |
-| Specificity | 特异度 | 真实负类中被正确识别的比例 |
-| F1 | F1 分数 | Precision 与 Recall 的调和均值 |
-| AUC | AUC 值 | ROC 曲线下面积，衡量区分能力 |
+| 指标          | Metric | 说明                       |
+| ----------- | ------ | ------------------------ |
+| Accuracy    | 准确率    | 所有类别的整体正确率               |
+| Precision   | 精确率    | 预测为正类中真正为正的比例            |
+| Recall      | 召回率    | 真实正类中被正确识别的比例            |
+| Specificity | 特异度    | 真实负类中被正确识别的比例            |
+| F1          | F1 分数  | Precision 与 Recall 的调和均值 |
+| AUC         | AUC 值  | ROC 曲线下面积，衡量区分能力         |
 
 ### 质量指标 | Response Quality
 
-| 指标 | Metric | 说明 |
-|------|--------|------|
-| Missing rate | 缺失率 | 模型未输出有效结果的比例 |
-| Mismatch rate | 幻觉率 | 输出结果不符合预设类别的比例 |
+| 指标            | Metric | 说明             |
+| ------------- | ------ | -------------- |
+| Missing rate  | 缺失率    | 模型未输出有效结果的比例   |
+| Mismatch rate | 幻觉率    | 输出结果不符合预设类别的比例 |
 
 ### 稳定性指标 | Stability
 
-| 指标 | Metric | 说明 |
-|------|--------|------|
-| CV | 变异系数 | 多次重复间的变异程度（越低越稳定）|
+| 指标  | Metric | 说明                |
+| --- | ------ | ----------------- |
+| CV  | 变异系数   | 多次重复间的变异程度（越低越稳定） |
 
 ---
 
