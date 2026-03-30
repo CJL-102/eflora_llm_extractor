@@ -1,19 +1,34 @@
 # eflora_llm_extractor
 
-植物性状LLM提取器评估 / LLM Extractor Evaluation for Plant Traits
+> 基于大语言模型的植物志性状批量提取与评估框架
+> A benchmark framework for automated botanical trait extraction using large language models
 
 ---
 
-## 项目概述 | Project Overview
+## 研究背景 | Background
 
-本项目评估三个大语言模型API（DeepSeek、Doubao、Kimi）在植物性状文本描述中提取性状的能力。
+植物志（Flora of China）包含海量物种形态描述文本，手动提取关键性状（如生长型、生命周期）耗时费力。本研究构建了一套基于LLM API的自动化性状提取流程，并对三种主流中文大模型的提取准确性、响应质量与输出稳定性进行系统评估。
 
-This project evaluates three LLM APIs (DeepSeek, Doubao, Kimi) on their ability to extract botanical traits from text descriptions.
+The *Flora of China* contains extensive morphological descriptions for thousands of species. Manual extraction of key traits (e.g., growth form, life span) is labor-intensive. This study establishes an automated LLM-based trait extraction pipeline and systematically benchmarks three leading Chinese LLMs on extraction accuracy, response quality, and output stability.
 
-**评估性状 | Evaluated Traits:**
+---
 
-- 生长形态 Growth form: 草本 (herbaceous) / 木本 (woody)
-- 生命周期 Life span: 一年生 (annual) / 多年生 (perennial)
+## 评估目标 | Evaluated Traits
+
+| 性状 | Trait | 类别 | Categories |
+|------|-------|------|------------|
+| 生长型 | Growth form | 草本 / 木本 | Herbaceous / Woody |
+| 生命周期 | Life span | 一年生 / 多年生 | Annual / Perennial |
+
+---
+
+## 评估模型 | Benchmarked Models
+
+| 模型 | 提供方 | Model | Provider |
+|------|--------|-------|----------|
+| DeepSeek | DeepSeek | DeepSeek | DeepSeek |
+| Doubao | 火山引擎 | Doubao | Volcano Engine (ByteDance) |
+| Kimi | 月之暗面 | Kimi | Moonshot AI |
 
 ---
 
@@ -21,89 +36,103 @@ This project evaluates three LLM APIs (DeepSeek, Doubao, Kimi) on their ability 
 
 ```
 eflora_llm_extractor/
-├── code/                      # R 分析脚本 / R analysis scripts
-│   ├── 01_提取table.R         # 提取指标并统计分析 / Extract metrics & statistical analysis
-│   ├── 02_指标图.R            # 生成指标图表 / Generate metric plots
-│   └── 03_混淆矩阵.R          # 生成混淆矩阵 / Generate confusion matrices
+├── code/
+│   ├── 20250919_中国植物志特征识别_deepseek.R   # LLM API 调用与批量提取
+│   ├── 01_提取table.R                           # 指标计算与统计分析
+│   ├── 02_指标图.R                              # 性能指标可视化
+│   └── 03_混淆矩阵.R                            # 混淆矩阵可视化
 │
-├── results/                   # 输出结果 / Output results
-│   ├── fig_confusion/         # 混淆矩阵图 / Confusion matrix plots
-│   ├── fig_metrics/           # 指标对比图 / Metric comparison plots
-│   └── tables/                # 评估表格 / Evaluation tables
+├── results/
+│   ├── fig_confusion/    # 混淆矩阵图 / Confusion matrix plots
+│   ├── fig_metrics/      # 指标对比图 / Metric comparison plots
+│   └── tables/           # 统计汇总表 / Summary tables (.xlsx)
 │
-├── data/                      # 输入数据 (已排除 / excluded)
-└── config.json                # API密钥 (已排除 / excluded)
+├── data/                 # 原始数据（已排除 / not tracked）
+└── config.json           # API 密钥（已排除 / not tracked）
 ```
 
 ---
 
-## 工作流程 | Workflow
+## 分析流程 | Analysis Pipeline
 
 ```
-数据输入 (Input)
-    ↓
-LLM预测 (Model Prediction)
-    ↓
-指标计算 (Evaluation Metrics)
-    ↓
-统计检验 (Statistical Tests: ANOVA + Tukey)
-    ↓
-可视化 (Visualization)
+植物志文本 (Flora of China text)
+        │
+        ▼
+  LLM API 批量调用（3 模型 × 多次重复）
+        │
+        ▼
+  性状提取结果（growth_form, life_span）
+        │
+        ▼
+  质控筛查（幻觉检测 + 缺失率统计）
+        │
+        ▼
+  指标计算（Accuracy / Precision / Recall / F1 / AUC）
+        │
+        ▼
+  统计检验（ANOVA + Tukey HSD）
+        │
+        ▼
+  可视化输出（混淆矩阵 + 指标图）
 ```
-
-1. **数据输入** | **Data Input**: 原始植物性状描述位于 `data/汇总数据.xlsx` | Raw plant trait descriptions in `data/汇总数据.xlsx`
-2. **模型预测** | **Model Prediction**: 三个LLM分别预测生长形态和生命周期 | Three LLMs predict growth form & life span
-3. **指标评估** | **Evaluation**: 计算准确率、精确率、召回率、F1、AUC、缺失率、幻觉率 | Calculate accuracy, precision, recall, F1, AUC, missing rate, hallucination rate
-4. **统计检验** | **Statistics**: ANOVA + Tukey HSD 进行模型间差异比较 | ANOVA + Tukey HSD for model comparison
-5. **可视化** | **Visualization**: 混淆矩阵和指标图表 | Confusion matrices and metric plots
 
 ---
 
-## 评估模型 | Models Evaluated
+## 评估指标 | Evaluation Metrics
 
-| 模型 | 提供方 | Model | Provider |
-|------|--------|-------|----------|
-| DeepSeek | DeepSeek API | DeepSeek | DeepSeek API |
-| Doubao | 火山引擎 | Doubao | Volcano Engine |
-| Kimi | 月之暗面 | Kimi | Moonshot AI |
+### 性能指标 | Performance
 
----
+| 指标 | Metric | 说明 |
+|------|--------|------|
+| Accuracy | 准确率 | 所有类别的整体正确率 |
+| Precision | 精确率 | 预测为正类中真正为正的比例 |
+| Recall | 召回率 | 真实正类中被正确识别的比例 |
+| Specificity | 特异度 | 真实负类中被正确识别的比例 |
+| F1 | F1 分数 | Precision 与 Recall 的调和均值 |
+| AUC | AUC 值 | ROC 曲线下面积，衡量区分能力 |
 
-## 核心指标 | Key Metrics
+### 质量指标 | Response Quality
 
-### 性能指标 | Performance Metrics
+| 指标 | Metric | 说明 |
+|------|--------|------|
+| Missing rate | 缺失率 | 模型未输出有效结果的比例 |
+| Mismatch rate | 幻觉率 | 输出结果不符合预设类别的比例 |
 
-| 指标 | 英文 | 说明 |
-|------|------|------|
-| Accuracy | 准确率 | 正确预测比例 |
-| Precision | 精确率 | 阳性预测准确度 |
-| Recall | 召回率 | 真实阳性检出率 |
-| Specificity | 特异度 | 真实阴性正确率 |
-| F1 | F1分数 | 精确率与召回率的调和均值 |
-| AUC | AUC值 | ROC曲线下面积 |
+### 稳定性指标 | Stability
 
-### 质量指标 | Quality Metrics
-
-| 指标 | 英文 | 说明 |
-|------|------|------|
-| Missing rate | 缺失率 | 未能提取的比例 |
-| Mismatch rate | 幻觉率 | 预测结果不符合标准类别的比例 |
-
-### 稳定性指标 | Stability Metrics
-
-| 指标 | 英文 | 说明 |
-|------|------|------|
-| CV | 变异系数 | 多次重复结果的标准差/均值，衡量模型稳定性 |
+| 指标 | Metric | 说明 |
+|------|--------|------|
+| CV | 变异系数 | 多次重复间的变异程度（越低越稳定）|
 
 ---
 
 ## 使用方法 | Usage
 
+**Step 1: 配置 API 密钥**
+
+创建 `config.json`（参考以下结构，不纳入版本控制）：
+
+```json
+{
+  "api_key.deepseek": { "apiKey": "YOUR_KEY" },
+  "api_key.doubao":   { "apiKey": "YOUR_KEY" },
+  "api_key.kimi":     { "apiKey": "YOUR_KEY" }
+}
+```
+
+**Step 2: 运行提取脚本**
+
 ```r
-# 运行完整评估流程 / Run full evaluation pipeline
-source("code/01_提取table.R")  # 提取与分析 / Extract & analyze
-source("code/02_指标图.R")      # 生成图表 / Generate plots
-source("code/03_混淆矩阵.R")    # 混淆矩阵 / Confusion matrices
+source("code/20250919_中国植物志特征识别_deepseek.R")
+```
+
+**Step 3: 运行评估分析**
+
+```r
+source("code/01_提取table.R")   # 指标计算与统计检验
+source("code/02_指标图.R")      # 生成性能对比图
+source("code/03_混淆矩阵.R")    # 生成混淆矩阵
 ```
 
 ---
@@ -111,23 +140,9 @@ source("code/03_混淆矩阵.R")    # 混淆矩阵 / Confusion matrices
 ## 环境依赖 | Requirements
 
 - R ≥ 4.0
-- R 包 | R packages: `readxl`, `writexl`, `dplyr`, `tidyr`, `caret`, `pROC`, `multcompView`
+- R packages:
 
 ```r
-install.packages(c("readxl", "writexl", "dplyr", "tidyr", "caret", "pROC", "multcompView"))
+install.packages(c("readxl", "writexl", "dplyr", "tidyr", "tidyverse",
+                   "caret", "pROC", "multcompView", "jsonlite", "ellmer"))
 ```
-
----
-
-## 输出示例 | Output Example
-
-### 指标汇总表 | Metrics Summary Table
-
-| Task | Model | Metric | Mean ± SE | Letter |
-|------|-------|--------|-----------|--------|
-| growth_form | deepseek | accuracy | 0.852 ± 0.012 | a |
-| growth_form | doubao | accuracy | 0.823 ± 0.015 | ab |
-| growth_form | kimi | accuracy | 0.789 ± 0.018 | b |
-
-> 显著性字母来自 Tukey HSD 检验 (p < 0.05)
-> Significance letters from Tukey HSD test (p < 0.05)
