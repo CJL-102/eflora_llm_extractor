@@ -7,9 +7,9 @@
 
 ## 研究背景 | Background
 
-植物性状（plant traits）是描述植物形态、生理、生活史等特征的基本属性，也是连接植物个体与生态系统功能的关键纽带（Violle et al., 2007; Funk et al., 2017）。其中，生长型（growth form）和生命周期（life span）是两类核心功能性状。《中国植物志》收录了中国三万余种维管植物，涵盖丰富的生长型和生命周期相关性状描述信息（郑博瀚等, 2024），但将这些非结构化文本转化为可用于定量分析的结构化数据，仍需依赖人工整理，过程劳动密集且耗时（Domazetoski et al., 2025）。本研究构建了一套基于大语言模型（LLMs）的植物性状自动提取方法框架，系统评估了模型类型、提示词设计及温度参数对任务性能的影响，并建立了标准化的评测体系。
+植物性状是描述植物形态、生理、生活史等特征的基本属性，其中生长型和生命周期是两类核心功能性状。《中国植物志》收录了中国三万余种维管植物的详细描述文本，但将这些非结构化信息转化为可用于定量分析的结构化数据，传统上依赖人工整理，过程劳动密集且耗时。本研究构建了一套基于大语言模型（LLMs）的植物性状自动提取方法框架，系统评估了模型类型、提示词设计及温度参数对任务性能的影响，并建立了标准化的评测体系。
 
-Plant traits are fundamental properties describing plant morphology, physiology, and life history, serving as key links between individual plants and ecosystem functioning (Violle et al., 2007; Funk et al., 2017). Growth form and life span are two core functional traits. The Flora of China contains extensive trait descriptions for over 30,000 vascular plant species in China (Zheng et al., 2024), but converting unstructured text into structured data for quantitative analysis remains labor-intensive and time-consuming (Domazetoski et al., 2025).This study establishes an automated plant trait extraction framework based on large language models (LLMs), systematically evaluates the effects of model type, prompt design, and temperature parameters on task performance, and develops a standardized evaluation system.
+Plant traits are fundamental properties describing plant morphology, physiology, and life history, with growth form and life span being two core functional traits. The Flora of China contains detailed descriptive texts for over 30,000 vascular plant species in China. However, converting this unstructured information into structured data for quantitative analysis has traditionally relied on manual curation, a labor-intensive and time-consuming process.This study establishes an automated plant trait extraction framework based on large language models (LLMs), systematically evaluates the effects of model type, prompt design, and temperature parameters on task performance, and develops a standardized evaluation system.
 
 ---
 
